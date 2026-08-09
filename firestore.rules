@@ -1,0 +1,47 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // A adapter selon votre stratégie d'authentification.
+    // En production, utilisez des rôles admin via custom claims.
+    match /teachers/{docId} {
+      allow read: if true;
+      allow write: if true;
+    }
+    match /classes/{docId} {
+      allow read: if true;
+      allow write: if true;
+    }
+    match /sessions/{docId} {
+      allow read: if true;
+      allow write: if true;
+    }
+    match /swimSlots/{docId} {
+      allow read: if true;
+      allow write: if true;
+    }
+    match /desiderata/{docId} {
+      allow read: if true;
+      allow write: if true;
+    }
+    match /programActivities/{docId} {
+      allow read: if true;
+      allow write: if true;
+    }
+    match /programLocations/{docId} {
+      allow read: if true;
+      allow write: if true;
+    }
+    match /programTemplates/{docId} {
+      allow read: if true;
+      allow write: if true;
+    }
+    match /planningConfig/{docId} {
+      allow read: if true;
+      allow write: if true;
+    }
+    match /classActivityPlans/{docId} {
+      allow read: if true;
+      allow write: if true;
+    }
+  }
+}

@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scholarly Canvas - EPS Planner</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand-wrap">
+        <p class="brand-kicker">EPS Scheduler</p>
+        <h1>Scholarly Canvas</h1>
+      </div>
+      <nav class="mode-switch" aria-label="Navigation principale">
+        <button id="publicModeBtn" class="active" type="button">Espace public</button>
+        <button id="adminModeBtn" type="button">Espace administrateur</button>
+        <button id="desiderataModeBtn" type="button">Désidérata</button>
+      </nav>
+    </header>
+
+    <main class="app-main">
+      <section id="publicSection" class="view">
+        <div class="card card-header">
+          <h2>Consultation professeur</h2>
+          <div class="inline-form-row">
+            <div>
+              <label for="publicTeacherSelect">Choisir un professeur d'EPS</label>
+              <select id="publicTeacherSelect"></select>
+            </div>
+            <div id="publicTeacherSummary" class="summary-box"></div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Planning hebdomadaire</h3>
+          <div id="publicTimetableContainer" class="table-wrap"></div>
+        </div>
+      </section>
+
+      <section id="desiderataSection" class="view hidden">
+        <div class="desiderata-shell">
+          <aside class="desiderata-side">
+            <div class="card">
+              <h3>Instructions</h3>
+              <p id="desiderataHint" class="card-subtitle">
+                Cliquez sur un créneau pour changer d'état. Vous pouvez cliquer-glisser pour appliquer le même état sur plusieurs créneaux.
+              </p>
+            </div>
+            <div class="card">
+              <h3>Légende</h3>
+              <div class="desiderata-legend">
+                <div><span class="legend-chip pref"></span><span>Préféré</span></div>
+                <div><span class="legend-chip neutral"></span><span>Neutre</span></div>
+                <div><span class="legend-chip unavail"></span><span>Indisponible</span></div>
+              </div>
+            </div>
+            <div class="card desiderata-summary-card">
+              <h3>Résumé</h3>
+              <div class="desiderata-summary-list">
+                <p>Heures préférées <strong id="desiderataPreferredHours">0h</strong></p>
+                <p>Créneaux indisponibles <strong id="desiderataUnavailableBlocks">0</strong></p>
+                <p>Objectif hebdo <strong id="desiderataTargetHours">0h</strong></p>
+              </div>
+            </div>
+          </aside>
+          <div class="desiderata-main">
+            <div class="card card-header">
+              <h2>Teacher Preferences</h2>
+              <p class="card-subtitle">Configure your availability and preferred teaching slots for the Academic Year 2024/25.</p>
+              <div class="inline-form-row">
+                <div>
+                  <label for="desiderataTeacherSelect">Choisir un professeur d'EPS</label>
+                  <select id="desiderataTeacherSelect"></select>
+                </div>
+                <div class="summary-box">Les créneaux "Préféré" seront entourés en vert dans l'affectation rapide professeur.</div>
+              </div>
+            </div>
+            <div class="card">
+              <div id="desiderataGridContainer" class="table-wrap"></div>
+              <div class="desiderata-actions">
+                <button id="desiderataClearBtn" class="secondary-btn" type="button">Effacer la sélection</button>
+                <div>
+                  <button id="desiderataSaveBtn" class="secondary-btn" type="button">Sauvegarder brouillon</button>
+                  <button id="desiderataSubmitBtn" type="button">Soumettre les désidérata</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="adminSection" class="view hidden">
+        <div id="adminShell" class="admin-shell">
+          <aside class="admin-shell-sidebar">
+            <div class="admin-shell-sidebar-head">
+              <h3>Admin Portal</h3>
+              <p>Academic Year 2024/25</p>
+              <button id="adminSidebarToggleBtn" class="admin-sidebar-toggle" type="button" title="Rétracter le menu admin">
+                <span class="material-symbols-outlined">left_panel_close</span>
+                <span>Rétracter</span>
+              </button>
+            </div>
+            <nav class="admin-tabs" aria-label="Onglets administrateur">
+              <button id="adminTabCreationBtn" class="active" type="button">
+                <span class="material-symbols-outlined">add_box</span>
+                <span>Création</span>
+              </button>
+              <button id="adminTabAssignBtn" type="button">
+                <span class="material-symbols-outlined">assignment_ind</span>
+                <span>Affectation rapide</span>
+              </button>
+              <button id="adminTabProgramBtn" type="button">
+                <span class="material-symbols-outlined">calendar_add_on</span>
+                <span>Programmation</span>
+              </button>
+              <button id="adminTabBusBtn" type="button">
+                <span class="material-symbols-outlined">directions_bus</span>
+                <span>Bus</span>
+              </button>
+              <button id="adminTabManageBtn" type="button">
+                <span class="material-symbols-outlined">settings_suggest</span>
+                <span>Gestion</span>
+              </button>
+              <button id="adminTabSwimBtn" type="button">
+                <span class="material-symbols-outlined">pool</span>
+                <span>Natation</span>
+              </button>
+              <button id="adminTabRecapBtn" type="button">
+                <span class="material-symbols-outlined">analytics</span>
+                <span>Récapitulatif</span>
+              </button>
+            </nav>
+          </aside>
+
+          <div class="admin-shell-content">
+            <div class="card card-header admin-title-card">
+              <h2>Resource Creation</h2>
+              <p class="card-subtitle">Configure teacher profiles and class requirements for EPS planning.</p>
+            </div>
+
+            <div id="adminCreationPanel" class="admin-panel">
+              <div class="admin-grid">
+                <div class="card">
+                  <h2>Créer / Modifier un professeur</h2>
+                  <form id="teacherForm">
+                    <label for="teacherEditSelect">Modifier un professeur existant</label>
+                    <select id="teacherEditSelect">
+                      <option value="">Nouveau professeur</option>
+                    </select>
+
+                    <label for="teacherName">Nom</label>
+                    <input id="teacherName" required type="text" />
+
+                    <label for="teacherAbbreviation">Abréviation affichée</label>
+                    <input id="teacherAbbreviation" required type="text" maxlength="8" placeholder="Ex: LEP" />
+
+                    <label for="teacherMaxHours">Temps de travail max (h/semaine)</label>
+                    <input id="teacherMaxHours" required type="number" min="1" max="40" />
+
+                    <label for="teacherColor">Couleur du professeur</label>
+                    <input id="teacherColor" type="color" value="#0b7285" />
+
+                    <div class="form-actions-row">
+                      <button id="teacherSubmitBtn" type="submit">Ajouter professeur</button>
+                      <button id="teacherCancelEditBtn" type="button" class="secondary-btn">Annuler modification</button>
+                    </div>
+                  </form>
+                </div>
+
+                <div class="card">
+                  <h2>Créer des classes automatiquement</h2>
+                  <form id="classForm">
+                    <label for="classLevel">Niveau</label>
+                    <select id="classLevel" required>
+                      <option value="">Sélectionner...</option>
+                      <option>Sixième</option>
+                      <option>Cinquième</option>
+                      <option>Quatrième</option>
+                      <option>Troisième</option>
+                      <option>Seconde</option>
+                      <option>Première</option>
+                      <option>Terminale</option>
+                    </select>
+
+                    <label for="classCount">Nombre de classes à créer</label>
+                    <input id="classCount" required type="number" min="1" max="26" value="1" />
+
+                    <label for="classWeeklyHours">Volume horaire EPS (h/semaine)</label>
+                    <input id="classWeeklyHours" required type="number" min="1" max="10" readonly />
+                    <p id="classRuleHint" class="summary-box"></p>
+                    <p id="classCreateInfo" class="summary-box"></p>
+
+                    <button type="submit">Créer les classes automatiquement</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <div id="adminAssignPanel" class="admin-panel hidden">
+              <p id="sessionError" class="error-text"></p>
+              <div class="card">
+                <h3>Affichages</h3>
+                <label for="plannerTeacherSelect">Professeurs à afficher (multi-sélection)</label>
+                <select id="plannerTeacherSelect" multiple size="6"></select>
+                <label class="check-row">
+                  <input id="plannerShowGlobal" type="checkbox" checked />
+                  <span>Afficher le planning général</span>
+                </label>
+                <label for="globalPlannerLayout">Affichage (planning général)</label>
+                <select id="globalPlannerLayout">
+                  <option value="GRID">Grille horaire</option>
+                  <option value="EXCEL">Vue type Excel</option>
+                </select>
+              </div>
+
+              <div id="plannerGrid" class="planner-grid"></div>
+            </div>
+
+            <div id="adminProgramPanel" class="admin-panel hidden">
+              <div class="program-subtabs">
+                <button id="programSubtabProgrammingBtn" class="active" type="button">Programmation</button>
+                <button id="programSubtabActivityBtn" type="button">Activité</button>
+                <button id="programSubtabLocationBtn" type="button">Salle</button>
+                <button id="programSubtabPeriodsBtn" type="button">Périodes</button>
+              </div>
+
+              <div id="programSubpanelProgramming" class="program-subpanel">
+                <div class="card">
+                  <div class="program-head">
+                    <div>
+                      <h3>Programmation des Activités &amp; Lieux</h3>
+                      <p class="card-subtitle">Affectez les types d'activités et les salles aux créneaux déjà planifiés.</p>
+                    </div>
+                  </div>
+                  <div id="programHint" class="summary-box"></div>
+                  <div id="programAnnualVisualContainer" class="table-wrap"></div>
+                </div>
+
+                <div class="card program-stats-card">
+                  <h3>Statut Global</h3>
+                  <div id="programStats" class="program-stats"></div>
+                </div>
+              </div>
+
+              <div id="programSubpanelActivity" class="program-subpanel hidden">
+                <div class="card">
+                  <h3>Activités disponibles</h3>
+                  <div class="program-resource-section">
+                    <div id="programActivitiesList" class="program-list"></div>
+                    <div class="program-inline-form">
+                      <input id="programActivityLabel" type="text" placeholder="Nouvelle activité" />
+                      <input id="programActivityCode" type="text" placeholder="Code activité" maxlength="6" />
+                      <select id="programActivityPreferredLocationSelect">
+                        <option value="">Salle préférentielle (optionnel)</option>
+                      </select>
+                      <button id="programAddActivityBtn" class="secondary-btn" type="button">Ajouter activité</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="programSubpanelLocation" class="program-subpanel hidden">
+                <div class="card">
+                  <h3>Salles &amp; occupation</h3>
+                  <div class="program-resource-section">
+                    <div id="programLocationsList" class="program-list"></div>
+                    <div class="program-inline-form">
+                      <input id="programLocationName" type="text" placeholder="Nouveau lieu" />
+                      <button id="programAddLocationBtn" class="secondary-btn" type="button">Ajouter lieu</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="programSubpanelPeriods" class="program-subpanel hidden">
+                <div class="card">
+                  <h3>Périodes pédagogiques</h3>
+                  <div class="program-resource-section">
+                    <p class="program-section-title">Dates des trimestres</p>
+                    <div class="program-inline-form">
+                      <label for="programTrim1Start">Trimestre 1</label>
+                      <div class="inline-date-row">
+                        <input id="programTrim1Start" type="date" />
+                        <input id="programTrim1End" type="date" />
+                      </div>
+                      <label for="programTrim2Start">Trimestre 2</label>
+                      <div class="inline-date-row">
+                        <input id="programTrim2Start" type="date" />
+                        <input id="programTrim2End" type="date" />
+                      </div>
+                      <label for="programTrim3Start">Trimestre 3</label>
+                      <div class="inline-date-row">
+                        <input id="programTrim3Start" type="date" />
+                        <input id="programTrim3End" type="date" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="program-resource-section">
+                    <p class="program-section-title">Dates des semestres (activités S1/S2)</p>
+                    <div class="program-inline-form">
+                      <label for="programSem1Start">Semestre 1</label>
+                      <div class="inline-date-row">
+                        <input id="programSem1Start" type="date" />
+                        <input id="programSem1End" type="date" />
+                      </div>
+                      <label for="programSem2Start">Semestre 2</label>
+                      <div class="inline-date-row">
+                        <input id="programSem2Start" type="date" />
+                        <input id="programSem2End" type="date" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="program-inline-form">
+                    <button id="programSavePeriodsBtn" class="secondary-btn" type="button">Enregistrer les dates</button>
+                    <p id="programPeriodsInfo" class="summary-box"></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div id="adminBusPanel" class="admin-panel hidden">
+              <div class="card">
+                <h3>Transport bus - planning global par jour</h3>
+                <p id="busHint" class="summary-box"></p>
+                <div class="bus-mail-controls">
+                  <div>
+                    <label for="busEmailTo">Email destinataire (Cathy)</label>
+                    <input id="busEmailTo" type="email" placeholder="cathy@exemple.fr" />
+                  </div>
+                  <div class="bus-mail-actions">
+                    <button id="busComposeMailBtn" type="button">Envoyer email Cathy</button>
+                    <button id="busCopyMailBtn" class="secondary-btn" type="button">Copier le texte</button>
+                  </div>
+                </div>
+                <div id="busMailPreview" class="summary-box"></div>
+                <div id="busPlannerContainer" class="bus-days-grid"></div>
+              </div>
+            </div>
+
+            <div id="adminManagePanel" class="admin-panel hidden">
+              <div class="admin-bottom-grid">
+                <div class="card">
+                  <h3>Professeurs</h3>
+                  <ul id="teachersList" class="data-list"></ul>
+                </div>
+                <div class="card">
+                  <h3>Classes</h3>
+                  <ul id="classesList" class="data-list"></ul>
+                </div>
+                <div class="card">
+                  <h3>Créneaux</h3>
+                  <ul id="sessionsList" class="data-list"></ul>
+                </div>
+              </div>
+            </div>
+
+            <div id="adminSwimPanel" class="admin-panel hidden">
+              <div class="card">
+                <h3>Repère natation</h3>
+                <p id="swimHint" class="summary-box"></p>
+                <div id="swimPlannerContainer" class="table-wrap"></div>
+              </div>
+            </div>
+
+            <div id="adminRecapPanel" class="admin-panel hidden">
+              <div class="card">
+                <h3>Récapitulatif heures professeurs</h3>
+                <div id="adminRecapContainer" class="table-wrap"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div id="assignModal" class="modal-overlay hidden">
+      <div class="modal-card">
+        <h3 id="assignModalTitle">Affectation</h3>
+        <p id="assignModalContext" class="card-subtitle"></p>
+        <div id="assignModalTeacherRow">
+          <label for="assignModalTeacherSelect">Enseignant</label>
+          <select id="assignModalTeacherSelect"></select>
+        </div>
+        <label for="assignModalLevelSelect">Niveau</label>
+        <select id="assignModalLevelSelect"></select>
+        <label for="assignModalClassSelect">Classe / AS / Danse</label>
+        <select id="assignModalClassSelect"></select>
+        <label for="assignModalCadenceSelect">Cadence</label>
+        <select id="assignModalCadenceSelect">
+          <option value="WEEKLY">Toutes les semaines</option>
+          <option value="WEEK_A">Semaine A</option>
+          <option value="WEEK_B">Semaine B</option>
+        </select>
+        <p id="assignModalHint" class="summary-box"></p>
+        <div class="modal-actions">
+          <button id="assignModalCancelBtn" class="secondary-btn" type="button">Annuler</button>
+          <button id="assignModalConfirmBtn" type="button">Affecter</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="programRoomsModal" class="modal-overlay hidden">
+      <div class="modal-card">
+        <h3 id="programRoomsModalTitle">Salles disponibles</h3>
+        <p id="programRoomsModalContext" class="card-subtitle"></p>
+        <div id="programRoomsModalBody" class="summary-box"></div>
+        <div class="modal-actions">
+          <button id="programRoomsModalCloseBtn" class="secondary-btn" type="button">Fermer</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="programPickModal" class="modal-overlay hidden">
+      <div class="modal-card">
+        <h3 id="programPickModalTitle">Choisir</h3>
+        <p id="programPickModalContext" class="card-subtitle"></p>
+        <div id="programPickModalList" class="program-pick-list"></div>
+        <div class="modal-actions">
+          <button id="programPickModalCloseBtn" class="secondary-btn" type="button">Fermer</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
