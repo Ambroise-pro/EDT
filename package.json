@@ -1,0 +1,17 @@
+{
+  "name": "scholarly-canvas-edt",
+  "version": "1.0.0",
+  "description": "Scholarly Canvas - EPS Scheduler with Firestore",
+  "scripts": {
+    "dev": "npx serve .",
+    "build": "echo 'Static site, no build needed'"
+  },
+  "keywords": [
+    "edt",
+    "scheduler",
+    "firestore",
+    "firebase"
+  ],
+  "author": "Ambroise",
+  "license": "MIT"
+}
